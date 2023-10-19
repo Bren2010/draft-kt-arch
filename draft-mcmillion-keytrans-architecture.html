@@ -1157,10 +1157,10 @@ securely apply KT to a number of common applications.<a href="#section-abstract-
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-contact-monitoring" class="internal xref">Contact Monitoring</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-third-party-management" class="internal xref">Third-Party Management</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-third-party-auditing" class="internal xref">Third-Party Auditing</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-third-party-auditing" class="internal xref">Third-Party Auditing</a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-third-party-management" class="internal xref">Third-Party Management</a></p>
 </li>
             </ul>
 </li>
@@ -1421,8 +1421,11 @@ user has looked up in the past. As such, it's less suited to use-cases where
 users look up a large number of ephemeral keys, but would work ideally in a
 use-case where users look up a small number of keys repeatedly (for example, the
 keys of regular contacts).<a href="#section-5-5" class="pilcrow">¶</a></p>
-<table class="center" id="table-1">
-        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<span id="name-comparison-of-deployment-mo"></span><table class="center" id="table-1">
+        <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-comparison-of-deployment-mo" class="selfRef">Comparison of deployment modes</a>
+        </caption>
 <thead>
           <tr>
             <th class="text-left" rowspan="1" colspan="1">Deployment Mode</th>
@@ -1457,23 +1460,36 @@ keys of regular contacts).<a href="#section-5-5" class="pilcrow">¶</a></p>
 monitoring queries later.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="third-party-management">
+<div id="third-party-auditing">
 <section id="section-5.2">
-        <h3 id="name-third-party-management">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-third-party-management" class="section-name selfRef">Third-Party Management</a>
+        <h3 id="name-third-party-auditing">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-third-party-auditing" class="section-name selfRef">Third-Party Auditing</a>
         </h3>
-<p id="section-5.2-1">TODO diagram showing user request going to service operator, immediately being
-proxied to manager with operator signature.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">With the Third-Party Auditing deployment mode, the service operator obtains
+signatures from a lightweight third-party auditor attesting to the fact that the
+service operator is constructing the tree correctly. These signatures are
+provided to users along with the responses for their queries.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">The third-party auditor is expected to run asynchronously, downloading and
+authenticating a log's contents in the background, so as not to become a
+bottleneck for the service operator.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">TODO diagram showing a user request going to a service operator and a response
+with an auditor signature coming back. Batched changes going to auditor in
+background.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="third-party-auditing">
+<div id="third-party-management">
 <section id="section-5.3">
-        <h3 id="name-third-party-auditing">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-third-party-auditing" class="section-name selfRef">Third-Party Auditing</a>
+        <h3 id="name-third-party-management">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-third-party-management" class="section-name selfRef">Third-Party Management</a>
         </h3>
-<p id="section-5.3-1">TODO diagram showing a user request going to a service operator and a response
-with an auditor signature coming back. Batched changes going to auditor in
-background.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-1">With the Third-Party Management deployment mode, a third party is responsible
+for the majority of the work of storing and operating the log, while the service
+operator serves mainly to enforce access control and authenticate the addition
+of new entries to the log. All user queries are initially sent by users directly
+to the service operator, and the service operator proxies them to the
+third-party manager if they pass access control.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">TODO diagram showing user request going to service operator, immediately being
+proxied to manager with operator signature.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
