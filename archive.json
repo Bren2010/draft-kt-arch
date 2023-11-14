@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-11-12T00:18:02.273083+00:00",
+  "timestamp": "2023-11-14T00:16:37.074130+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -49,6 +49,23 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOKhdr7c52lG3E",
+      "title": "what happens (to users) if a keyserver goes bad?",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/1",
+      "state": "OPEN",
+      "author": "sftcd",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "We have a history of some key servers going bad. That could be due to attack, inability to operate or for other reasons. Regardless of the reason though, shouldn't the architecture describe e.g. a set of goals for how users and/or the overall system can recover from such a situation?",
+      "createdAt": "2023-11-12T14:55:36Z",
+      "updatedAt": "2023-11-12T14:55:36Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": []
 }
