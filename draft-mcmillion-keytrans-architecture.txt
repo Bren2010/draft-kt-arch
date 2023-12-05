@@ -3,9 +3,9 @@
 
 
 Key Transparency                                            B. McMillion
-Internet-Draft                                           19 October 2023
+Internet-Draft                                           5 December 2023
 Intended status: Informational                                          
-Expires: 21 April 2024
+Expires: 7 June 2024
 
 
                      Key Transparency Architecture
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2024.
+   This Internet-Draft will expire on 7 June 2024.
 
 Copyright Notice
 
@@ -82,6 +82,7 @@ Table of Contents
      5.3.  Third-Party Management
    6.  Security Guarantees
      6.1.  Privacy Guarantees
+       6.1.1.  Leakage to Third-Party
    7.  Implementation Guidance
    8.  IANA Considerations
    9.  Normative References
@@ -170,8 +171,8 @@ Table of Contents
 
    *Transparency Log:*  A specialized service capable of securely
       attesting to the information (such as public keys) associated with
-      a given end-user identity.  The transparency log is run either
-      entirely or partially by the service operator.
+      a given end-user identity.  The transparency log is usually run
+      either entirely or partially by the service operator.
 
 3.  Protocol Overview
 
@@ -213,9 +214,9 @@ Table of Contents
 4.  User Interactions
 
    As discussed in Section 3, KT follows a client-server architecture.
-   This means that all user interaction is directly with the service
-   operator.  The operations that can be executed by a user are as
-   follows:
+   This means that all user interaction is directly with the
+   transparency log.  The operations that can be executed by a user are
+   as follows:
 
    1.  *Search:* Performs a lookup on a specific key in the most recent
        version of the log.  Users may request either a specific version
@@ -288,32 +289,32 @@ Table of Contents
    In the interest of satisfying the widest range of use-cases possible,
    three different modes for deploying a Transparency Log are supported.
    Each mode has slightly different requirements and efficiency
-   considerations for both the service operator and the end-user.
+   considerations for both the transparency log and the end-user.
 
    *Third-Party Management* and *Third-Party Auditing* are two
-   deployment modes that require the service operator to delegate part
-   of the operation of the Transparency Log to a third party.  Users are
-   able to run more efficiently as long as they can assume that the
-   service operator and the third party won't collude to trick them into
-   accepting malicious results.
+   deployment modes that require the transparency log to delegate part
+   of its operation to a third party.  Users are able to run more
+   efficiently as long as they can assume that the transparency log and
+   the third party won't collude to trick them into accepting malicious
+   results.
 
    With both third-party modes, all requests from end-users are
-   initially routed to the service operator and the service operator
-   coordinates with the third party themself.  End-users never contact
-   the third party directly, however they will need a signature public
-   key from the third party to verify its assertions.
+   initially routed to the transparency log and the log coordinates with
+   the third party itself.  End-users never contact the third party
+   directly, however they will need a signature public key from the
+   third party to verify its assertions.
 
    With Third-Party Management, the third party performs the majority of
-   the work of actually storing and operating the log, and the service
-   operator only needs to sign new entries as they're added.  With
-   Third-Party Auditing, the service operator performs the majority of
-   the work of storing and operating the log, and obtains signatures
+   the work of actually storing and operating the service, and the
+   transparency log only signs new entries as they're added.  With
+   Third-Party Auditing, the transparency log performs the majority of
+   the work of storing and operating the service, and obtains signatures
    from a lightweight third-party auditor at regular intervals asserting
-   that the service operator has been constructing the tree correctly.
+   that the tree has been constructed correctly.
 
    *Contact Monitoring*, on the other hand, supports a single-party
-   deployment with no third party.  The tradeoff is that executing the
-   background monitoring protocol requires an amount of work that's
+   deployment with no third party.  The cost of this is that executing
+   the background monitoring protocol requires an amount of work that's
    proportional to the number of keys a user has looked up in the past.
    As such, it's less suited to use-cases where users look up a large
    number of ephemeral keys, but would work ideally in a use-case where
@@ -335,22 +336,22 @@ Table of Contents
 
 5.1.  Contact Monitoring
 
-   TODO diagram showing user request going to service operator, followed
+   TODO diagram showing user request going to transparency log, followed
    by monitoring queries later.
 
 5.2.  Third-Party Auditing
 
-   With the Third-Party Auditing deployment mode, the service operator
+   With the Third-Party Auditing deployment mode, the transparency log
    obtains signatures from a lightweight third-party auditor attesting
-   to the fact that the service operator is constructing the tree
-   correctly.  These signatures are provided to users along with the
-   responses for their queries.
+   to the fact that the tree has been constructed correctly.  These
+   signatures are provided to users along with the responses for their
+   queries.
 
    The third-party auditor is expected to run asynchronously,
    downloading and authenticating a log's contents in the background, so
-   as not to become a bottleneck for the service operator.
+   as not to become a bottleneck for the transparency log.
 
-   TODO diagram showing a user request going to a service operator and a
+   TODO diagram showing a user request going to a transparency log and a
    response with an auditor signature coming back.  Batched changes
    going to auditor in background.
 
@@ -358,13 +359,13 @@ Table of Contents
 
    With the Third-Party Management deployment mode, a third party is
    responsible for the majority of the work of storing and operating the
-   log, while the service operator serves mainly to enforce access
+   log, while the transparency log serves mainly to enforce access
    control and authenticate the addition of new entries to the log.  All
-   user queries are initially sent by users directly to the service
-   operator, and the service operator proxies them to the third-party
-   manager if they pass access control.
+   user queries are initially sent by users directly to the transparency
+   log, and the log operator proxies them to the third-party manager if
+   they pass access control.
 
-   TODO diagram showing user request going to service operator,
+   TODO diagram showing user request going to transparency log,
    immediately being proxied to manager with operator signature.
 
 6.  Security Guarantees
@@ -390,21 +391,47 @@ Table of Contents
    Depending on the exact reason that the user enters an invalid state,
    it will either be detected by background monitoring or the next time
    that out-of-band communication is available.  Importantly, this means
-   that users must stay online for some fixed amount of time after
+   that users must stay online for some bounded amount of time after
    entering an invalid state for it to be successfully detected.
 
-   The exact caveats of the above guarantee depend naturally on the
-   security of underlying cryptographic primitives, but also the
+   Alternatively, instead of executing a lookup incorrectly, the
+   Transparency Log can attempt to prevent a user from learning about
+   more recent states of the log.  This would allow the log to continue
+   executing queries correctly, but on outdated versions of data.  To
+   prevent this, applications configure an upper bound on how stale a
+   query response can be without being rejected.
+
+   The exact caveats of the above guarantees depend naturally on the
+   security of underlying cryptographic primitives, and also the
    deployment mode that the Transparency Log relies on:
 
    *  Third-Party Management and Third-Party Auditing require an
-      assumption that the service operator and the third-party manager/
+      assumption that the transparency log and the third-party manager/
       auditor do not collude to trick users into accepting malicious
       results.
 
    *  Contact Monitoring requires an assumption that the user that owns
       a key and all users that look up the key do the necessary
       monitoring afterwards.
+
+   In short, assuming that the underlying cryptographic primitives used
+   are secure, any deployment-specific assumptions hold (such as non-
+   collusion), and that user devices don't go permanently offline, then
+   malicious behavior by the Transparency Log is always detected within
+   a bounded amount of time.  The parameters that determine the maximum
+   amount of time before malicious behavior is detected are as follows:
+
+   *  How stale an application allows query responses to be (ie, how
+      long an application is willing to go without seeing updates to the
+      tree).
+
+   *  How frequently users execute background monitoring.
+
+   *  How frequently users exercise out-of-band communication.
+
+   *  For third-party auditing: the maximum amount of lag that an
+      auditor is allowed to have, with respect to the most recent tree
+      head.
 
 6.1.  Privacy Guarantees
 
@@ -430,8 +457,41 @@ Table of Contents
    application can prevent the users from searching for each other's
    keys and learning the contents of any subsequent account updates.
 
-   TODO specify the rest of the privacy guarantees of the finished
-   protocol
+   Service operators also expect to be able to control sensitive
+   population-level metrics about their users.  These metrics include
+   the size of their userbase, the frequency with which new users join,
+   and the frequency with which existing users update their keys.
+
+   KT allows service operators to hide the total size of their userbase
+   from end-users and other outside observers.  It also allows service
+   operators to obscure the rate at which changes are made to the tree
+   by padding real changes with fake ones, causing outsiders to observe
+   a baseline constant rate of changes.  Note however, that this
+   information is not obscured from a third-party manager or auditor if
+   one is used.  Since the third-party plays a crucial role in ensuring
+   correct operation of the log, it necessarily is able to distinguish
+   real changes from fake ones, and therefore also the total number of
+   real keys.
+
+6.1.1.  Leakage to Third-Party
+
+   In the event that a third-party auditor or manager is used, there's
+   additional information leaked to the third-party that's not visible
+   to outsiders.
+
+   In the case of a third-party auditor, the auditor is able to learn
+   the total number of distinct keys in the log.  It is also able to
+   distinguish between real and fake modifications to the tree, and keep
+   track of when individual keys are modified.  However, auditors are
+   not able to learn the plaintext values of any keys or values.  This
+   is because keys are masked with a VRF, and values are only provided
+   to auditors as commitments.
+
+   In the case of a third-party manager, the manager generally learns
+   everything that the service operator would know.  This includes the
+   total set of plaintext keys and values and their modification
+   history.  It also includes traffic patterns, such as how often a
+   specific key is looked up.
 
 7.  Implementation Guidance
 

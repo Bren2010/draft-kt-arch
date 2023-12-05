@@ -24,13 +24,13 @@ securely apply KT to a number of common applications.
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.11.0
+    platformdirs 4.0.0
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
-    wcwidth 0.2.8
+    wcwidth 0.2.12
 -->
 <link href="draft-mcmillion-keytrans-architecture.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1029,11 +1029,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Key Transparency Architecture</td>
-<td class="right">October 2023</td>
+<td class="right">December 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">McMillion</td>
-<td class="center">Expires 21 April 2024</td>
+<td class="center">Expires 7 June 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1046,12 +1046,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-mcmillion-keytrans-architecture-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-19" class="published">19 October 2023</time>
+<time datetime="2023-12-05" class="published">5 December 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-21">21 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-06-07">7 June 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1104,7 @@ securely apply KT to a number of common applications.<a href="#section-abstract-
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1169,6 +1169,11 @@ securely apply KT to a number of common applications.<a href="#section-abstract-
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-privacy-guarantees" class="internal xref">Privacy Guarantees</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-leakage-to-third-party" class="internal xref">Leakage to Third-Party</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1283,7 +1288,7 @@ resources necessary to operate an end-to-end encrypted communication service.<a 
         <dd style="margin-left: 1.5em" id="section-2-2.12">
           <p id="section-2-2.12.1">A specialized service capable of securely attesting to the information (such
 as public keys) associated with a given end-user identity. The transparency
-log is run either entirely or partially by the service operator.<a href="#section-2-2.12.1" class="pilcrow">¶</a></p>
+log is usually run either entirely or partially by the service operator.<a href="#section-2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1329,7 +1334,7 @@ reason for rejection, is left to the application.<a href="#section-3-4" class="p
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-user-interactions" class="section-name selfRef">User Interactions</a>
       </h2>
 <p id="section-4-1">As discussed in <a href="#protocol-overview" class="auto internal xref">Section 3</a>, KT follows a client-server architecture.
-This means that all user interaction is directly with the service operator. The
+This means that all user interaction is directly with the transparency log. The
 operations that can be executed by a user are as follows:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
 <li id="section-4-2.1">
@@ -1401,24 +1406,24 @@ channel, gossipping with other users<a href="#section-4.1-7" class="pilcrow">¶<
 <p id="section-5-1">In the interest of satisfying the widest range of use-cases possible, three
 different modes for deploying a Transparency Log are supported. Each mode has
 slightly different requirements and efficiency considerations for both the
-service operator and the end-user.<a href="#section-5-1" class="pilcrow">¶</a></p>
+transparency log and the end-user.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2"><strong>Third-Party Management</strong> and <strong>Third-Party Auditing</strong> are two deployment modes
-that require the service operator to delegate part of the operation of the
-Transparency Log to a third party. Users are able to run more efficiently as
-long as they can assume that the service operator and the third party won't
+that require the transparency log to delegate part of its operation
+to a third party. Users are able to run more efficiently as
+long as they can assume that the transparency log and the third party won't
 collude to trick them into accepting malicious results.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">With both third-party modes, all requests from end-users are initially routed to
-the service operator and the service operator coordinates with the third party
-themself. End-users never contact the third party directly, however they will
+the transparency log and the log coordinates with the third party
+itself. End-users never contact the third party directly, however they will
 need a signature public key from the third party to verify its assertions.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">With Third-Party Management, the third party performs the majority of the work
-of actually storing and operating the log, and the service operator only needs
-to sign new entries as they're added. With Third-Party Auditing, the service
-operator performs the majority of the work of storing and operating the log, and
+of actually storing and operating the service, and the transparency log only
+signs new entries as they're added. With Third-Party Auditing, the transparency
+log performs the majority of the work of storing and operating the service, and
 obtains signatures from a lightweight third-party auditor at regular intervals
-asserting that the service operator has been constructing the tree correctly.<a href="#section-5-4" class="pilcrow">¶</a></p>
+asserting that the tree has been constructed correctly.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5"><strong>Contact Monitoring</strong>, on the other hand, supports a single-party deployment
-with no third party. The tradeoff is that executing the background monitoring
+with no third party. The cost of this is that executing the background monitoring
 protocol requires an amount of work that's proportional to the number of keys a
 user has looked up in the past. As such, it's less suited to use-cases where
 users look up a large number of ephemeral keys, but would work ideally in a
@@ -1459,7 +1464,7 @@ keys of regular contacts).<a href="#section-5-5" class="pilcrow">¶</a></p>
         <h3 id="name-contact-monitoring">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-contact-monitoring" class="section-name selfRef">Contact Monitoring</a>
         </h3>
-<p id="section-5.1-1">TODO diagram showing user request going to service operator, followed by
+<p id="section-5.1-1">TODO diagram showing user request going to transparency log, followed by
 monitoring queries later.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1468,14 +1473,14 @@ monitoring queries later.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
         <h3 id="name-third-party-auditing">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-third-party-auditing" class="section-name selfRef">Third-Party Auditing</a>
         </h3>
-<p id="section-5.2-1">With the Third-Party Auditing deployment mode, the service operator obtains
+<p id="section-5.2-1">With the Third-Party Auditing deployment mode, the transparency log obtains
 signatures from a lightweight third-party auditor attesting to the fact that the
-service operator is constructing the tree correctly. These signatures are
+tree has been constructed correctly. These signatures are
 provided to users along with the responses for their queries.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">The third-party auditor is expected to run asynchronously, downloading and
 authenticating a log's contents in the background, so as not to become a
-bottleneck for the service operator.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">TODO diagram showing a user request going to a service operator and a response
+bottleneck for the transparency log.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">TODO diagram showing a user request going to a transparency log and a response
 with an auditor signature coming back. Batched changes going to auditor in
 background.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -1486,12 +1491,12 @@ background.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-third-party-management" class="section-name selfRef">Third-Party Management</a>
         </h3>
 <p id="section-5.3-1">With the Third-Party Management deployment mode, a third party is responsible
-for the majority of the work of storing and operating the log, while the service
-operator serves mainly to enforce access control and authenticate the addition
+for the majority of the work of storing and operating the log, while the
+transparency log serves mainly to enforce access control and authenticate the addition
 of new entries to the log. All user queries are initially sent by users directly
-to the service operator, and the service operator proxies them to the
+to the transparency log, and the log operator proxies them to the
 third-party manager if they pass access control.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.3-2">TODO diagram showing user request going to service operator, immediately being
+<p id="section-5.3-2">TODO diagram showing user request going to transparency log, immediately being
 proxied to manager with operator signature.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1523,20 +1528,47 @@ then either:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-4">Depending on the exact reason that the user enters an invalid state, it will
 either be detected by background monitoring or the next time that out-of-band
 communication is available. Importantly, this means that users must stay
-online for some fixed amount of time after entering an invalid state for it to
+online for some bounded amount of time after entering an invalid state for it to
 be successfully detected.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">The exact caveats of the above guarantee depend naturally on the security of
-underlying cryptographic primitives, but also the deployment mode that the
-Transparency Log relies on:<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-5">Alternatively, instead of executing a lookup incorrectly, the Transparency Log
+can attempt to prevent a user from learning about more recent states of the log.
+This would allow the log to continue executing queries correctly, but on
+outdated versions of data. To prevent this, applications configure an upper
+bound on how stale a query response can be without being rejected.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-6">The exact caveats of the above guarantees depend naturally on the security of
+underlying cryptographic primitives, and also the deployment mode that the
+Transparency Log relies on:<a href="#section-6-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-6.1">
-          <p id="section-6-6.1.1">Third-Party Management and Third-Party Auditing require an assumption that the
-service operator and the third-party manager/auditor do not collude
-to trick users into accepting malicious results.<a href="#section-6-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6-7.1">
+          <p id="section-6-7.1.1">Third-Party Management and Third-Party Auditing require an assumption that the
+transparency log and the third-party manager/auditor do not collude
+to trick users into accepting malicious results.<a href="#section-6-7.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-6.2">
-          <p id="section-6-6.2.1">Contact Monitoring requires an assumption that the user that owns a key and
-all users that look up the key do the necessary monitoring afterwards.<a href="#section-6-6.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-6-7.2">
+          <p id="section-6-7.2.1">Contact Monitoring requires an assumption that the user that owns a key and
+all users that look up the key do the necessary monitoring afterwards.<a href="#section-6-7.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-6-8">In short, assuming that the underlying cryptographic primitives used are secure,
+any deployment-specific assumptions hold (such as non-collusion), and that user
+devices don't go permanently offline, then malicious behavior by the
+Transparency Log is always detected within a bounded amount of time. The
+parameters that determine the maximum amount of time before malicious behavior
+is detected are as follows:<a href="#section-6-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-9.1">
+          <p id="section-6-9.1.1">How stale an application allows query responses to be (ie, how long an
+application is willing to go without seeing updates to the tree).<a href="#section-6-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-9.2">
+          <p id="section-6-9.2.1">How frequently users execute background monitoring.<a href="#section-6-9.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-9.3">
+          <p id="section-6-9.3.1">How frequently users exercise out-of-band communication.<a href="#section-6-9.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-9.4">
+          <p id="section-6-9.4.1">For third-party auditing: the maximum amount of lag that an auditor is allowed
+to have, with respect to the most recent tree head.<a href="#section-6-9.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="privacy-guarantees">
@@ -1561,7 +1593,38 @@ for each other's lookup keys. This prevents the two users from learning about
 each other's existence. If the users were previously friends but no longer are,
 the application can prevent the users from searching for each other's keys and
 learning the contents of any subsequent account updates.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1-4">TODO specify the rest of the privacy guarantees of the finished protocol<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">Service operators also expect to be able to control sensitive population-level
+metrics about their users. These metrics include the size of their userbase, the
+frequency with which new users join, and the frequency with which existing users
+update their keys.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">KT allows service operators to hide the total size of their userbase from
+end-users and other outside observers. It also allows service operators to
+obscure the rate at which changes are made to the tree by padding real changes
+with fake ones, causing outsiders to observe a baseline constant rate of
+changes. Note however, that this information is not obscured from a third-party
+manager or auditor if one is used. Since the third-party plays a crucial role in
+ensuring correct operation of the log, it necessarily is able to distinguish
+real changes from fake ones, and therefore also the total number of real
+keys.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<div id="leakage-to-third-party">
+<section id="section-6.1.1">
+          <h4 id="name-leakage-to-third-party">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-leakage-to-third-party" class="section-name selfRef">Leakage to Third-Party</a>
+          </h4>
+<p id="section-6.1.1-1">In the event that a third-party auditor or manager is used, there's additional
+information leaked to the third-party that's not visible to outsiders.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-2">In the case of a third-party auditor, the auditor is able to learn the total
+number of distinct keys in the log. It is also able to distinguish between real
+and fake modifications to the tree, and keep track of when individual keys are
+modified. However, auditors are not able to learn the plaintext values of any
+keys or values. This is because keys are masked with a VRF, and values are only
+provided to auditors as commitments.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-3">In the case of a third-party manager, the manager generally learns everything
+that the service operator would know. This includes the total set of plaintext
+keys and values and their modification history. It also includes traffic
+patterns, such as how often a specific key is looked up.<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
