@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-05T00:17:13.265118+00:00",
+  "timestamp": "2023-12-07T00:17:07.130395+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -62,9 +62,24 @@
       "labels": [],
       "body": "We have a history of some key servers going bad. That could be due to attack, inability to operate or for other reasons. Regardless of the reason though, shouldn't the architecture describe e.g. a set of goals for how users and/or the overall system can recover from such a situation?",
       "createdAt": "2023-11-12T14:55:36Z",
-      "updatedAt": "2023-11-12T14:55:36Z",
+      "updatedAt": "2023-12-06T21:07:44Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "OR13",
+          "authorAssociation": "NONE",
+          "body": "(chair hat off)\r\n\r\nI am not sure if this section implies redundancy or not, but perhaps its enough to convince readers its in scope?\r\n\r\nhttps://bren2010.github.io/draft-kt-arch/draft-mcmillion-keytrans-architecture.html#name-third-party-auditing",
+          "createdAt": "2023-12-06T21:02:29Z",
+          "updatedAt": "2023-12-06T21:02:29Z"
+        },
+        {
+          "author": "sftcd",
+          "authorAssociation": "NONE",
+          "body": "Doesn't seem to address the issue as I read it. I think text about how a new log could potentially take over from an old one with the help of auditors of the old log or something like that might do the trick though. I guess that'd be a form of portability? Or maybe as you say, if common practice was for end users to not only use one log but to commonly make use of >1 independent logs, then maybe that'd be enough. I do think covering such issues in an architecture document would be needed or it'd never be covered later though.",
+          "createdAt": "2023-12-06T21:07:43Z",
+          "updatedAt": "2023-12-06T21:07:43Z"
+        }
+      ]
     }
   ],
   "pulls": []
