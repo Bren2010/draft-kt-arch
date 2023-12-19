@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-17T00:19:01.413093+00:00",
+  "timestamp": "2023-12-19T00:17:23.144162+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -80,6 +80,86 @@
           "updatedAt": "2023-12-06T21:07:43Z"
         }
       ]
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOKhdr7c56DKuE",
+      "title": "Definition of KT",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/2",
+      "state": "OPEN",
+      "author": "eshaghoshms",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The Introduction says, \"Any malicious entries added to such a log will generally be visible to all users, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account.\" In the following paragraph, privacy is mentioned: \"KT can better preserve user privacy by only showing entries of the log to participants that genuinely need to see them.\" It is unclear what it means to say that all entries are generally visible to all users, while achieving privacy through access control.",
+      "createdAt": "2023-12-18T23:40:00Z",
+      "updatedAt": "2023-12-18T23:40:00Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKhdr7c56DL5g",
+      "title": "User Interactions",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/3",
+      "state": "OPEN",
+      "author": "eshaghoshms",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "For Search: Would it make sense to add the following: \" if the corresponding version does not exist, server should return a proof of non-inclusion\"? I am also wondering if it is important to exclude batch update from the definition of Update (Note that this means that new values are added to the log immediately and are not queued for later insertion with a batch of other values.) since most scalable systems will do batching at least to some degree.",
+      "createdAt": "2023-12-18T23:43:54Z",
+      "updatedAt": "2023-12-18T23:43:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKhdr7c56DNiY",
+      "title": "Deployment Modes and Out-of-Band Communication",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/4",
+      "state": "OPEN",
+      "author": "eshaghoshms",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The relation between the Deployment Modes and Out-of-Band Communication is a bit unclear. Is Out-of-Band Communication assumed for all Deployment Modes? For example, the Contact Monitoring Mode says it is \"a single-party deployment with no third party\". But this would not be sufficient to detect forking attacks unless some Out-of-Band Communication or Bulletin Board is assumed.",
+      "createdAt": "2023-12-18T23:49:10Z",
+      "updatedAt": "2023-12-18T23:49:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKhdr7c56DQU5",
+      "title": "Security Guarantees",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/5",
+      "state": "OPEN",
+      "author": "eshaghoshms",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Some additional parameters to consider for security:\r\n\r\n1. What state is needed to be maintained by the client devices to detect malicious behavior\r\n2. What state the client devices need to maintain about the user's contacts to help detect malicious behavior\r\n3. Who detects the malicious behavior: the owner of the key, or its recipient\r\n\r\n\r\n\r\n",
+      "createdAt": "2023-12-18T23:57:28Z",
+      "updatedAt": "2023-12-18T23:57:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKhdr7c56DSqg",
+      "title": "Leakage to Third-Party",
+      "url": "https://github.com/Bren2010/draft-kt-arch/issues/6",
+      "state": "OPEN",
+      "author": "eshaghoshms",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 6.1.1 says the following: \"In the case of a third-party auditor, the auditor is able to learn the total number of distinct keys in the log. It is also able to distinguish between real and fake modifications to the tree, and keep track of when individual keys are modified.\" Many of the KT systems so not suffer from this leakage: SEEMless, VeRSA, Verdict, Parakeet, ELEKTRA. This leakage in the third-party auditing mode is easily avoidable.",
+      "createdAt": "2023-12-19T00:04:00Z",
+      "updatedAt": "2023-12-19T00:04:00Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": []
