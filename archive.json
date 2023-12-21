@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-19T00:17:23.144162+00:00",
+  "timestamp": "2023-12-21T00:17:15.704631+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -91,9 +91,9 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
-      "body": "The Introduction says, \"Any malicious entries added to such a log will generally be visible to all users, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account.\" In the following paragraph, privacy is mentioned: \"KT can better preserve user privacy by only showing entries of the log to participants that genuinely need to see them.\" It is unclear what it means to say that all entries are generally visible to all users, while achieving privacy through access control.",
+      "body": "The Introduction says, \"Any malicious entries added to such a log will generally be visible to all users, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account.\" In the following paragraph, privacy is mentioned: \"KT can better preserve user privacy by only showing entries of the log to participants that genuinely need to see them.\" It is unclear what it means to say that all entries are generally visible to all users, while achieving privacy through access control. Maybe the sentence can be rephrased to: \"Any malicious entries added to such a log will be visible to the owners and recipients of the public-keys, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account\".",
       "createdAt": "2023-12-18T23:40:00Z",
-      "updatedAt": "2023-12-18T23:40:00Z",
+      "updatedAt": "2023-12-19T01:02:35Z",
       "closedAt": null,
       "comments": []
     },
@@ -139,9 +139,9 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
-      "body": "Some additional parameters to consider for security:\r\n\r\n1. What state is needed to be maintained by the client devices to detect malicious behavior\r\n2. What state the client devices need to maintain about the user's contacts to help detect malicious behavior\r\n3. Who detects the malicious behavior: the owner of the key, or its recipient\r\n\r\n\r\n\r\n",
+      "body": "Some additional parameters that would be nice to add in Section 6 (The parameters that determine the maximum amount of time before malicious behavior is detected are as follows:)\r\n\r\n1. What state is needed to be maintained by the client devices to detect malicious behavior\r\n2. What state the client devices need to maintain about the user's contacts to help detect malicious behavior\r\n3. Who detects the malicious behavior: the owner of the key, or its recipient\r\n\r\n\r\n\r\n",
       "createdAt": "2023-12-18T23:57:28Z",
-      "updatedAt": "2023-12-18T23:57:28Z",
+      "updatedAt": "2023-12-19T01:04:05Z",
       "closedAt": null,
       "comments": []
     },
@@ -155,9 +155,9 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
-      "body": "Section 6.1.1 says the following: \"In the case of a third-party auditor, the auditor is able to learn the total number of distinct keys in the log. It is also able to distinguish between real and fake modifications to the tree, and keep track of when individual keys are modified.\" Many of the KT systems so not suffer from this leakage: SEEMless, VeRSA, Verdict, Parakeet, ELEKTRA. This leakage in the third-party auditing mode is easily avoidable.",
+      "body": "Section 6.1.1 says the following: \"In the case of a third-party auditor, the auditor is able to learn the total number of distinct keys in the log. It is also able to distinguish between real and fake modifications to the tree, and keep track of when individual keys are modified.\" Many of the KT systems so not suffer from this leakage: SEEMless, VeRSA, Verdict, Parakeet, ELEKTRA. Since this leakage in the third-party auditing mode is easily avoidable, I suggest removing the quoted part from Section 6.1.1.",
       "createdAt": "2023-12-19T00:04:00Z",
-      "updatedAt": "2023-12-19T00:04:00Z",
+      "updatedAt": "2023-12-19T01:05:39Z",
       "closedAt": null,
       "comments": []
     }
