@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-28T00:16:57.791345+00:00",
+  "timestamp": "2023-12-31T00:18:55.448207+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -47,6 +47,11 @@
       "name": "wontfix",
       "description": "This will not be worked on",
       "color": "ffffff"
+    },
+    {
+      "name": "pr-ready",
+      "description": "",
+      "color": "E90CE2"
     }
   ],
   "issues": [
@@ -90,10 +95,12 @@
       "author": "eshaghoshms",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "pr-ready"
+      ],
       "body": "The Introduction says, \"Any malicious entries added to such a log will generally be visible to all users, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account.\" In the following paragraph, privacy is mentioned: \"KT can better preserve user privacy by only showing entries of the log to participants that genuinely need to see them.\" It is unclear what it means to say that all entries are generally visible to all users, while achieving privacy through access control. Maybe the sentence can be rephrased to: \"Any malicious entries added to such a log will be visible to the owners and recipients of the public-keys, in which case a user can detect that they're being impersonated by viewing the public keys attached to their account\".",
       "createdAt": "2023-12-18T23:40:00Z",
-      "updatedAt": "2023-12-19T01:02:35Z",
+      "updatedAt": "2023-12-28T21:47:40Z",
       "closedAt": null,
       "comments": []
     },
@@ -106,12 +113,22 @@
       "author": "eshaghoshms",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "pr-ready"
+      ],
       "body": "For Search: Would it make sense to add the following: \" if the corresponding version does not exist, server should return a proof of non-inclusion\"? I am also wondering if it is important to exclude batch update from the definition of Update (Note that this means that new values are added to the log immediately and are not queued for later insertion with a batch of other values.) since most scalable systems will do batching at least to some degree.",
       "createdAt": "2023-12-18T23:43:54Z",
-      "updatedAt": "2023-12-18T23:43:54Z",
+      "updatedAt": "2023-12-28T21:51:48Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "I don't think that we can support proofs of non-inclusion, as they require leaking too much information about the number of entries in the database.\r\n\r\nI would support replacing language about \"batching\" with something that instead just captures the idea that there is no temporary SCT-style proof.",
+          "createdAt": "2023-12-28T21:51:41Z",
+          "updatedAt": "2023-12-28T21:51:41Z"
+        }
+      ]
     },
     {
       "number": 4,
@@ -122,12 +139,22 @@
       "author": "eshaghoshms",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "pr-ready"
+      ],
       "body": "The relation between the Deployment Modes and Out-of-Band Communication is a bit unclear. Is Out-of-Band Communication assumed for all Deployment Modes? For example, the Contact Monitoring Mode says it is \"a single-party deployment with no third party\". But this would not be sufficient to detect forking attacks unless some Out-of-Band Communication or Bulletin Board is assumed.",
       "createdAt": "2023-12-18T23:49:10Z",
-      "updatedAt": "2023-12-18T23:49:10Z",
+      "updatedAt": "2023-12-28T22:18:34Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "Out-of-Band Communication is available to detect forks in all deployment modes. Forking can still happen in the third-party modes if there's collusion",
+          "createdAt": "2023-12-28T22:18:21Z",
+          "updatedAt": "2023-12-28T22:18:21Z"
+        }
+      ]
     },
     {
       "number": 5,
@@ -154,10 +181,12 @@
       "author": "eshaghoshms",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "pr-ready"
+      ],
       "body": "Section 6.1.1 says the following: \"In the case of a third-party auditor, the auditor is able to learn the total number of distinct keys in the log. It is also able to distinguish between real and fake modifications to the tree, and keep track of when individual keys are modified.\" Many of the KT systems so not suffer from this leakage: SEEMless, VeRSA, Verdict, Parakeet, ELEKTRA. Since this leakage in the third-party auditing mode is easily avoidable, I suggest removing the quoted part from Section 6.1.1.",
       "createdAt": "2023-12-19T00:04:00Z",
-      "updatedAt": "2023-12-19T01:05:39Z",
+      "updatedAt": "2023-12-28T22:21:00Z",
       "closedAt": null,
       "comments": []
     }
