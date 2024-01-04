@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-02T00:17:15.917244+00:00",
+  "timestamp": "2024-01-04T00:17:28.490713+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -118,7 +118,7 @@
       ],
       "body": "For Search: Would it make sense to add the following: \" if the corresponding version does not exist, server should return a proof of non-inclusion\"? I am also wondering if it is important to exclude batch update from the definition of Update (Note that this means that new values are added to the log immediately and are not queued for later insertion with a batch of other values.) since most scalable systems will do batching at least to some degree.",
       "createdAt": "2023-12-18T23:43:54Z",
-      "updatedAt": "2023-12-28T21:51:48Z",
+      "updatedAt": "2024-01-03T22:36:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -127,6 +127,34 @@
           "body": "I don't think that we can support proofs of non-inclusion, as they require leaking too much information about the number of entries in the database.\r\n\r\nI would support replacing language about \"batching\" with something that instead just captures the idea that there is no temporary SCT-style proof.",
           "createdAt": "2023-12-28T21:51:41Z",
           "updatedAt": "2023-12-28T21:51:41Z"
+        },
+        {
+          "author": "eshaghoshms",
+          "authorAssociation": "NONE",
+          "body": "Isn't in crucial to support uniqueness of keys (i.e., given a certain username, the KT system should be able to return only one key as the latest)? I believe this uniqueness property implies support for non-inclusion proofs for the following reason. If there is no support for non-inclusion proof, the KT server could just claim (without any proof) that a certain username does not exist in the tree, when it actually does.",
+          "createdAt": "2024-01-03T18:46:13Z",
+          "updatedAt": "2024-01-03T18:46:13Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "NONE",
+          "body": "Are we perhaps relying on owner signing for uniqueness of keys in the database? What if owner signing is not present -- how does the client know that the service provider isn't equivocating by showing two \"valid\" entries for the same username at the same epoch?\r\n\r\n> I don't think that we can support proofs of non-inclusion, as they require leaking too much information about the number of entries in the database.\r\n\r\nHm, I'm also curious about why this is the case. How do proofs of non-inclusion leak more info about the # of entries in the database, beyond what proofs of inclusion do?",
+          "createdAt": "2024-01-03T19:00:37Z",
+          "updatedAt": "2024-01-03T19:00:37Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "> Isn't in crucial to support uniqueness of keys (i.e., given a certain username, the KT system should be able to return only one key as the latest)? I believe this uniqueness property implies support for non-inclusion proofs for the following reason. If there is no support for non-inclusion proof, the KT server could just claim (without any proof) that a certain username does not exist in the tree, when it actually does.\r\n\r\nIf a proof of inclusion is provided, then that does convey a guarantee of uniqueness: this is the only value corresponding to this key. Functionally (and from a security perspective), proofs of non-inclusion aren't very useful because receiving a proof of non-inclusion results in the same user experience as the KT server simply being down. Either way, there's no risk of impersonation because no cryptographic material was provided.\r\n\r\n> Are we perhaps relying on owner signing for uniqueness of keys in the database?\r\n\r\nOwner Signing is not discussed\r\n\r\n> Hm, I'm also curious about why this is the case. How do proofs of non-inclusion leak more info about the # of entries in the database, beyond what proofs of inclusion do?\r\n\r\nYou can provide a proof of inclusion in a sparse Merkle tree, where empty subtrees are represented by a random hash. This would avoid leaking the number of populated leaves, as outside observers wouldn't be able to distinguish populated subtrees from random ones. To provide a proof of non-inclusion in this same type of tree would require showing that a subtree is empty, and the height of the empty subtree leaks information about the number of populated leaves.",
+          "createdAt": "2024-01-03T21:02:11Z",
+          "updatedAt": "2024-01-03T21:02:11Z"
+        },
+        {
+          "author": "eshaghoshms",
+          "authorAssociation": "NONE",
+          "body": "I\u2019m curious why you think that a proof of inclusion is good enough for uniqueness? By proof-of-non-inclusion, I mean a cryptographic proof that the queried username does not exist in the database. To support uniqueness, the server should be able to provide a proof of the unique key corresponding to the queried username (if it exists in the database) or \"empty string\" to indicate that it does not. That is very different from no response from the server since the server is down. If the proof-of-non-inclusion is the same as no response, the server could exploit this to attack an account by distributing a fake key and proof-of-inclusion for the fake key to some parties, while simply not responding to some other, for the same username. Did you mean something else by proof-of-non-inclusion?\r\n\r\n> If a proof of inclusion is provided, then that does convey a guarantee of uniqueness: this is the only value corresponding to this key. Functionally (and from a security perspective), proofs of non-inclusion aren't very useful because receiving a proof of non-inclusion results in the same user experience as the KT server simply being down. Either way, there's no risk of impersonation because no cryptographic material was provided.\r\n\r\n",
+          "createdAt": "2024-01-03T22:35:30Z",
+          "updatedAt": "2024-01-03T22:36:32Z"
         }
       ]
     },
@@ -144,7 +172,7 @@
       ],
       "body": "The relation between the Deployment Modes and Out-of-Band Communication is a bit unclear. Is Out-of-Band Communication assumed for all Deployment Modes? For example, the Contact Monitoring Mode says it is \"a single-party deployment with no third party\". But this would not be sufficient to detect forking attacks unless some Out-of-Band Communication or Bulletin Board is assumed.",
       "createdAt": "2023-12-18T23:49:10Z",
-      "updatedAt": "2023-12-28T22:18:34Z",
+      "updatedAt": "2024-01-03T21:38:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -153,6 +181,13 @@
           "body": "Out-of-Band Communication is available to detect forks in all deployment modes. Forking can still happen in the third-party modes if there's collusion",
           "createdAt": "2023-12-28T22:18:21Z",
           "updatedAt": "2023-12-28T22:18:21Z"
+        },
+        {
+          "author": "eshaghoshms",
+          "authorAssociation": "NONE",
+          "body": "Thanks for the clarification! Can I suggest that we add this clarification in Section 5 as follows:\r\n\r\n_In the interest of satisfying the widest range of use-cases possible, three different modes for deploying a Transparency Log are supported. Each mode has slightly different requirements and efficiency considerations for both the transparency log and the end-user._\r\n\r\nto\r\n\r\n_In the interest of satisfying the widest range of use-cases possible, three different modes for deploying a Transparency Log are supported. Each mode has slightly different requirements and efficiency considerations for both the transparency log and the end-user. **Note that Out-of-Band Communication is necessary to detect forks in all of these deployment modes.**_",
+          "createdAt": "2024-01-03T21:38:50Z",
+          "updatedAt": "2024-01-03T21:38:50Z"
         }
       ]
     },
