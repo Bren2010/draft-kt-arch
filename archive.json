@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-04T00:17:28.490713+00:00",
+  "timestamp": "2024-01-07T00:19:10.696265+00:00",
   "repo": "Bren2010/draft-kt-arch",
   "labels": [
     {
@@ -118,7 +118,7 @@
       ],
       "body": "For Search: Would it make sense to add the following: \" if the corresponding version does not exist, server should return a proof of non-inclusion\"? I am also wondering if it is important to exclude batch update from the definition of Update (Note that this means that new values are added to the log immediately and are not queued for later insertion with a batch of other values.) since most scalable systems will do batching at least to some degree.",
       "createdAt": "2023-12-18T23:43:54Z",
-      "updatedAt": "2024-01-03T22:36:32Z",
+      "updatedAt": "2024-01-04T21:32:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -155,6 +155,27 @@
           "body": "I\u2019m curious why you think that a proof of inclusion is good enough for uniqueness? By proof-of-non-inclusion, I mean a cryptographic proof that the queried username does not exist in the database. To support uniqueness, the server should be able to provide a proof of the unique key corresponding to the queried username (if it exists in the database) or \"empty string\" to indicate that it does not. That is very different from no response from the server since the server is down. If the proof-of-non-inclusion is the same as no response, the server could exploit this to attack an account by distributing a fake key and proof-of-inclusion for the fake key to some parties, while simply not responding to some other, for the same username. Did you mean something else by proof-of-non-inclusion?\r\n\r\n> If a proof of inclusion is provided, then that does convey a guarantee of uniqueness: this is the only value corresponding to this key. Functionally (and from a security perspective), proofs of non-inclusion aren't very useful because receiving a proof of non-inclusion results in the same user experience as the KT server simply being down. Either way, there's no risk of impersonation because no cryptographic material was provided.\r\n\r\n",
           "createdAt": "2024-01-03T22:35:30Z",
           "updatedAt": "2024-01-03T22:36:32Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "We have the same understanding of what a proof of non-inclusion is. What you're describing isn't an attack. If I'm a user trying to lookup the public key of my friend, the server refusing to respond doesn't allow impersonation. However, if I'm trying to do monitoring, the server refusing to respond to my monitor queries would need to be handled the same as any cryptographic reason that monitoring might fail (the detection of a fork / other illegal changes to the tree)",
+          "createdAt": "2024-01-04T00:30:01Z",
+          "updatedAt": "2024-01-04T00:30:01Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "This conversation made me realize an interesting, privacy-preserving way to do proofs of non-inclusion for a key. When a user attempts to look up a key that doesn't exist, the server can insert version zero of the key with a special tombstone marker as its value. Subsequent lookups can reuse the same tombstone entry.\r\n\r\nThis obviously isn't something that makes sense to do for every application. As I said above, for most applications, a proof of non-inclusion and refusal to provide proof have the same UX and security value. But if a proof of non-inclusion would be particularly valuable, then this is an option.",
+          "createdAt": "2024-01-04T02:37:29Z",
+          "updatedAt": "2024-01-04T02:37:29Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "NONE",
+          "body": "Ok, after re-reading carefully I think I understand how we are thinking about this differently. In Brendan's proposed architecture, each username is associated with a unique position in the sparse Merkle tree, which never changes, no matter how many times a new value is posted for that username.\r\n\r\nIn Esha's version, each leaf node in the Merkle tree is derived by the tuple (username || version #), so that updates to the value for a username increase this version # and result in different positions in the Merkle tree.\r\n\r\nIn Brendan's proposal, a proof of inclusion suffices for uniqueness because there is exactly one place to look for a username, regardless of how many times it was updated. Therefore, proof of non-inclusion is not needed.\r\n\r\n> To provide a proof of non-inclusion in this same type of tree would require showing that a subtree is empty, and the height of the empty subtree leaks information about the number of populated leaves.\r\n\r\nBtw Brendan, not sure if we understood this the same way, but: typically a proof of non-inclusion is not just a matter of showing that a subtree is empty. It instead consists of two proofs of inclusion of neighboring nodes in tree, which implies that since both of them are in the tree, and they are neighbors, then nothing in between them exists (hence a proof of non-inclusion for a target node). Hope that makes sense...\r\n\r\n---\r\n\r\nAnyway, I think it would be useful for us to perhaps spawn off a separate discussion / issue around the design of having static nodes in the tree for usernames that do not change no matter how many times the username's value is updated. I think there are some interesting tradeoffs which this approach -- I'll create a new issue to host that discussion if you don't mind!",
+          "createdAt": "2024-01-04T21:31:38Z",
+          "updatedAt": "2024-01-04T21:32:21Z"
         }
       ]
     },
@@ -172,7 +193,7 @@
       ],
       "body": "The relation between the Deployment Modes and Out-of-Band Communication is a bit unclear. Is Out-of-Band Communication assumed for all Deployment Modes? For example, the Contact Monitoring Mode says it is \"a single-party deployment with no third party\". But this would not be sufficient to detect forking attacks unless some Out-of-Band Communication or Bulletin Board is assumed.",
       "createdAt": "2023-12-18T23:49:10Z",
-      "updatedAt": "2024-01-03T21:38:51Z",
+      "updatedAt": "2024-01-04T00:31:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -188,6 +209,13 @@
           "body": "Thanks for the clarification! Can I suggest that we add this clarification in Section 5 as follows:\r\n\r\n_In the interest of satisfying the widest range of use-cases possible, three different modes for deploying a Transparency Log are supported. Each mode has slightly different requirements and efficiency considerations for both the transparency log and the end-user._\r\n\r\nto\r\n\r\n_In the interest of satisfying the widest range of use-cases possible, three different modes for deploying a Transparency Log are supported. Each mode has slightly different requirements and efficiency considerations for both the transparency log and the end-user. **Note that Out-of-Band Communication is necessary to detect forks in all of these deployment modes.**_",
           "createdAt": "2024-01-03T21:38:50Z",
           "updatedAt": "2024-01-03T21:38:50Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "OWNER",
+          "body": "Go for it",
+          "createdAt": "2024-01-04T00:31:39Z",
+          "updatedAt": "2024-01-04T00:31:39Z"
         }
       ]
     },
